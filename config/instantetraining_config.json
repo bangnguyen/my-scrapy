@@ -1,0 +1,115 @@
+{
+  "base_url": "http://www.instantetraining.com",
+  "start_url": "http://www.instantetraining.com/video-training",
+  "levels": {
+    "1_1": {
+      "xpath": "//strong[contains(.,'presentation')]/following-sibling::a/@href"
+    }
+  },
+  "settings": {
+    "DOWNLOAD_DELAY": 3
+  },
+  "output_config": {
+    "fields": {
+      "provider_id": "204",
+      "product_type_id": {
+        "python": "product_type_id('Courses')"
+      },
+      "time_lock": "N",
+      "space_lock": "N",
+      "language": "eng",
+      "description": {
+        "xpath": "//div[@class='uk-margin-top'][2]/p",
+        "python": "html_to_text(data)"
+      },
+      "name": {
+        "xpath": "string(//h1)"
+      },
+      "price_display_float": {
+        "xpath": "string(//h3[@class='uk-text-bold no-margin color-red'])",
+        "re": "\\d.*"
+      },
+      "price_currency": "USD",
+      "duration_filter": {
+        "xpath": "string(//strong[contains(.,'Running Time:')]/following-sibling::span)",
+        "python": "duration_filter(data)"
+      },
+      "duration_display": {
+        "xpath": "string(//strong[contains(.,'Running Time:')]/following-sibling::span)"
+      },
+      "product_video_url": {
+        "xpath": "substring-before(substring-after(//div[@class='jwplayer-preview']/script,':'),',')",
+        "re": "http.*mp4|http.*flv?"
+      },
+      "product_image_url": [
+        {
+          "xpath": "substring-before(substring-after(//div[@class='jwplayer-preview']/script,'image'),',')",
+          "re": "http.*jpg|http.*png|http.*jpeg"
+        },
+        {
+          "xpath": "string(//img[@class='uk-thumbnail']/@src)",
+          "python": "urljoin('https://www.instantetraining.com/',data ) if data else None"
+        },
+        {
+          "xpath": "substring-before(substring-after(//div[@class='jwplayer-preview']/script,'image'),',')",
+          "re": "Video.*jpg|tem.*jpg|Video.*png",
+          "python": "urljoin('https://www.instantetraining.com/',data ) if data else None"
+        },
+        {
+          "xpath": "//div[@class='uk-responsive-width uk-text-center']/img/@src",
+          "re": "http.*"
+        },
+        {
+          "xpath": "//div[@class='uk-responsive-width uk-text-center']/img/@src",
+          "python": "urljoin('https://www.instantetraining.com/',data ) if data else None"
+        }
+      ],
+      "difficulty": {
+        "xpath": "string(//strong[contains(.,'Skill Level:')]/following-sibling::span)",
+        "python": "difficulty(data)"
+      },
+      "ProductRating": {
+        "fields": {
+          "pub_status": "L",
+          "rating_only": "1",
+          "overall_rating": {
+            "xpath": "//span[@class='extravote-info']//text()",
+            "re": "\\d+\\.\\d+",
+            "python": "int(round(float(data)))"
+          },
+          "review": null,
+          "user_id": "0",
+          "username": null
+        },
+        "type": "[ProductRating]"
+      },
+      "instructors": {
+        "fields": {
+          "name": {
+            "xpath": "//h1[@class='uk-margin-bottom-remove']//text()"
+          },
+          "bio": {
+            "xpath": "//article[@class='uk-article']//p//text()"
+          },
+          "image": {
+            "xpath": "//article[@class='uk-article']//img/@src",
+            "python": "urljoin('http://www.instantetraining.com', data) if data else None"
+          },
+          "link": {
+            "xpath": "//strong[contains(.,'presentation')]/following-sibling::a/@href",
+            "level": "1"
+          }
+        },
+        "type": "[Instructor]",
+        "level": "1_1"
+      }
+    },
+    "type": "Product",
+    "extractor_rules": {
+      "rules": [
+        "Rule(lxml(allow=('.*'), restrict_xpaths=('//h1[@class=\\'uk-article-title\\']/a'),deny=('/facebook-insights')),callback='parse_product')",
+        "Rule(lxml(allow=('/video-training.*'), restrict_xpaths=('//a[@class=\\'uk-button uk-button-primary\\']', '//ul[@class=\\'uk-pagination\\']/li/a'),),follow=True)"
+      ]
+    }
+  }
+}

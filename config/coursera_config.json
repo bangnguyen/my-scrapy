@@ -1,0 +1,19 @@
+{
+  "base_url": "https://www.coursera.org/",
+  "levels": {
+    "0": {
+      "callback": "coursera.get_courses"
+    }
+  },
+  "start_url": "https://www.coursera.org/api/courses.v1?fields=categories,certificates,description,display,instructorIds,membershipIds,partnerIds,partnerLogo,photoUrl,previewLink,primaryLanguages,specializations,subtitleLanguages,v1Details,workload,memberships.v1(vcMembershipId),partners.v1(classLogo,homeLink,links,logo,name,shortName),v1Details.v1(aboutTheCourse,courseFormat,courseSyllabus,faq,readings,recommendedBackground,sessionIds,videos),v1Sessions.v1(active,dbEndDate,durationString,hasSigTrack,instructorIds,selfStudy,startDay,startMonth,startYear,vcDetails),instructors.v1(firstName,fullName,lastName,middleName,partnerIds,partners,photo,prefixName,profileId,shortName,suffixName),languages.v1(englishName),specializations.v1(logo,name,partnerIds,shortName)&includes=categories,instructorIds,membershipIds,partnerIds,primaryLanguages,specializations,subtitleLanguages,v1Details,memberships.v1(vcMembershipId),v1Details.v1(sessionIds),v1Sessions.v1(instructorIds,vcDetails),instructors.v1(partnerIds),specializations.v1(partnerIds)",
+  "output_config": {
+    "fields": {
+      "provider_id": "67",
+      "product_type_id": {
+        "python": "product_type_id('courses')"
+      },
+      "language": "eng"
+    },
+    "type": "Product"
+  }
+}

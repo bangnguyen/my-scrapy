@@ -1,0 +1,61 @@
+{
+  "base_url": "http://www.e-careers.com/", 
+  "start_url": "http://www.e-careers.com/", 
+  "levels": {}, 
+  "output_config": {
+    "fields": {
+      "provider_id": "107", 
+      "product_type_id": {
+        "python": "product_type_id('Courses')"
+      }, 
+      "time_lock": "N", 
+      "space_lock": "N", 
+      "language": "eng", 
+      "description": [
+        {
+          "xpath": "normalize-space(substring(//div[@class='jshop_prod_description'], 0, 520))", 
+          "python": "normalize_space(html2text.html2text(data)) if data else None"
+        }, 
+        {
+          "xpath": "string(//div[@id='tabbox']/div[@id='tab1']//td[contains(., 'Description:')])", 
+          "python": "data.replace('Description:', '')"
+        }
+      ], 
+      "name": {
+        "xpath": "string(//div[@class='fullproducttitle']/h1)"
+      }, 
+      "toc": {
+        "xpath": "//div[@id='tabbox']/div[@id='tab1']"
+      }, 
+      "product_video_url": {
+        "xpath": "//div[@class='jshop_prod_description']//iframe/@src", 
+        "python": "data if 'http' in data else None"
+      }, 
+      "formats": "video", 
+      "product_image_url": {
+        "xpath": "//div[@class='outterborder']//td[@class='col1']//img/@src"
+      }, 
+      "price_currency": "USD", 
+      "duration_filter": {
+        "xpath": "//div[@id='tabbox']/div[@id='tab2']//strong[contains(., 'Learning Hours')]/following-sibling::text()[1]", 
+        "python": "duration_filter(data)"
+      }, 
+      "price_display_float": {
+        "xpath": "//span[@id='block_price']/text()", 
+        "re": "\\d+.*d*", 
+        "python": "get_price_float(str(round(int(data.replace(',',''))*1.68)))"
+      }, 
+      "duration_display": {
+        "xpath": "//div[@id='tabbox']/div[@id='tab2']//strong[contains(., 'Learning Hours')]/following-sibling::text()[1]", 
+        "python": "duration_filter(data)"
+      }, 
+      "requirements": {
+        "xpath": "//div[@id='tabbox']/div[@id='tab2']//strong[contains(., 'Entry Requirements')]/following-sibling::text()[1]"
+      }
+    }, 
+    "type": "Product", 
+    "extractor_rules": {
+      "rules": "[Rule(lxml(allow=('.*'),restrict_xpaths=('//div[@class=\\'image_block\\']/a')), callback='parse_product'), Rule(lxml(allow=('.*'), restrict_xpaths=('//ul[contains(@class, \\'maximenuck\\')]/li[2]//div[@class=\\'maxidrop-main\\']//a')), follow=True)]"
+    }
+  }
+}
